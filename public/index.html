@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI SEO Blog Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="./css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>AI-Powered SEO Blog Generator</h1>
+    <input type="text" id="keywordInput" placeholder="e.g., 2 day trek in India" />
+    <button onclick="generateBlog()">Generate Blog</button>
+
+    <div id="output" class="result-section"></div>
+  </div>
+
+  <script>
+    async function generateBlog() {
+      const keyword = document.getElementById('keywordInput').value.trim();
+      const output = document.getElementById('output');
+
+      if (!keyword) {
+        output.innerHTML = '<p style="color:red;">Please enter a keyword.</p>';
+        return;
+      }
+
+      output.innerHTML = '<p class="loader">Generating SEO content for: <strong>' + keyword + '</strong>...</p>';
+
+      try {
+        const response = await fetch(`/keyword-trend/${encodeURIComponent(keyword)}`);
+        const data = await response.json();
+
+        if (data.response) {
+          const blog = JSON.parse(data.response);
+
+          output.innerHTML = `
+            <div class="meta">
+              <h2>${blog.seo_title}</h2>
+              <p><strong>Meta Description:</strong> ${blog.meta_description}</p>
+              <p><strong>Keywords:</strong> ${blog.keywords.join(", ")}</p>
+            </div>
+            <h3>Blog Content</h3>
+            <pre>${blog.blog_post}</pre>
+          `;
+        } else {
+          output.innerHTML = '<p>No blog data returned.</p>';
+        }
+
+      } catch (err) {
+        console.error(err);
+        output.innerHTML = '<p style="color:red;">Something went wrong. Check server logs.</p>';
+      }
+    }
+  </script>
+
+</body>
+</html>
