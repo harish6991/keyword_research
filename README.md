@@ -11,8 +11,6 @@ It uses:
 
 🖥️ A lightweight HTML/CSS/JS frontend to input keywords and view results
 
-📸 Preview
-<!-- (optional image if you add one) -->
 
 ✨ Features
 ✅ Automatically finds top 3 Google results for a keyword
